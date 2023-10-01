@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { register } from '../../store/actions';
+import { RegisterRequestInterface } from '../../types/registerRequest.interface';
 
 @Component({
   selector: 'app-register',
@@ -7,6 +11,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    RouterLink,
   ],
 })
 
@@ -19,11 +24,16 @@ export class RegisterComponent {
   })
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private store: Store,
   ) {
   }
 
   onSubmit(): void {
     console.log('form', this.form.getRawValue());
+    const request: RegisterRequestInterface = {
+      user: this.form.getRawValue(),
+    }
+    this.store.dispatch(register({ request }))
   }
 }
